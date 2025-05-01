@@ -126,6 +126,8 @@
         .option-letter {
             width: 30px;
             height: 30px;
+            min-width: 30px; /* Prevents shrinking */
+            min-height: 30px; /* Prevents shrinking */
             background: rgba(255, 255, 255, 0.2);
             border-radius: 50%;
             display: flex;
@@ -133,6 +135,12 @@
             align-items: center;
             margin-right: 15px;
             font-weight: 500;
+            flex-shrink: 0; /* Prevents shrinking */
+        }
+        
+        .option-text {
+            flex: 1; /* Takes remaining space */
+            word-break: break-word; /* Allows text to wrap nicely */
         }
         
         .feedback {
@@ -199,7 +207,8 @@
             background: rgba(255, 255, 255, 0.3);
         }
         
-        @media (max-width: 600px) {
+        /* Mobile responsive styles */
+        @media (max-width: 768px) {
             h1 {
                 font-size: 2rem;
             }
@@ -209,7 +218,44 @@
             }
             
             .option {
-                padding: 12px;
+                padding: 12px 10px;
+                align-items: flex-start;
+            }
+            
+            .option-letter {
+                width: 28px;
+                height: 28px;
+                min-width: 28px;
+                min-height: 28px;
+                margin-right: 10px;
+                font-size: 0.9rem;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .option-letter {
+                width: 26px;
+                height: 26px;
+                min-width: 26px;
+                min-height: 26px;
+                margin-right: 8px;
+                font-size: 0.8rem;
+            }
+            
+            .question {
+                font-size: 1.1rem;
+            }
+            
+            .container {
+                padding: 25px 15px;
             }
         }
     </style>
@@ -283,7 +329,7 @@
                 
                 if (studyType === 'presidents') {
                     // Generate a random question type (1: name->event, 2: event->name, 3: years->name)
-                    const questionType = Math.floor(Math.random() * 2) + 1;
+                    const questionType = Math.floor(Math.random() * 3) + 1;
                     
                     if (questionType === 1) {
                         questionText = `Which significant event is associated with ${correctAnswer.name}'s presidency?`;
@@ -386,7 +432,7 @@
                     optionElement.className = 'option';
                     optionElement.innerHTML = `
                         <div class="option-letter">${letters[index]}</div>
-                        <div>${option.text}</div>
+                        <div class="option-text">${option.text}</div>
                     `;
                     
                     // Add event listener for option selection

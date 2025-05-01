@@ -43,8 +43,19 @@ function initTheme() {
         });
     }
     
-    // Check for saved theme preference
-    const currentTheme = localStorage.getItem('theme') || 'light';
+    // Check if we're on mobile - default to dark mode
+    const isMobile = window.innerWidth <= 768;
+    
+    // Get saved theme preference or use default based on device
+    let currentTheme = localStorage.getItem('theme');
+    
+    // If no theme is set and on mobile, default to dark mode
+    if (!currentTheme && isMobile) {
+        currentTheme = 'dark';
+        localStorage.setItem('theme', 'dark');
+    } else if (!currentTheme) {
+        currentTheme = 'light';
+    }
     
     // Apply saved theme
     if (currentTheme === 'dark') {
@@ -68,3 +79,18 @@ function toggleTheme(isDark) {
 
 // Apply theme on page load
 document.addEventListener('DOMContentLoaded', initTheme);
+
+// Check on resize as well (for orientation changes)
+window.addEventListener('resize', function() {
+    const isMobile = window.innerWidth <= 768;
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    
+    // If resizing to mobile and currently in light mode, switch to dark mode
+    if (isMobile && currentTheme === 'light') {
+        toggleTheme(true);
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) {
+            themeToggle.checked = true;
+        }
+    }
+});

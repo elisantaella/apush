@@ -1,62 +1,39 @@
-/* Additional Dark Mode Styles */
-body.dark-mode .feedback.correct {
-    background: rgba(40, 80, 40, 0.5);
-}
-
-body.dark-mode .feedback.wrong {
-    background: rgba(80, 40, 40, 0.5);
-}
-
-body.dark-mode .option.correct {
-    background: rgba(40, 80, 40, 0.5);
-    border-color: rgba(60, 120, 60, 0.8);
-}
-
-body.dark-mode .option.wrong {
-    background: rgba(80, 40, 40, 0.5);
-    border-color: rgba(120, 60, 60, 0.8);
-}
-
-body.dark-mode .flashcard-front, 
-body.dark-mode .flashcard-back {
-    background: var(--card-bg-dark);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-}
-
-body.dark-mode .card {
-    background: var(--card-bg-dark);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-}
-
-body.dark-mode .card.matched {
-    background: rgba(40, 80, 40, 0.5);
-    border-color: rgba(60, 120, 60, 0.8);
-}
-
-body.dark-mode .card.wrong {
-    background: rgba(80, 40, 40, 0.5);
-    border-color: rgba(120, 60, 60, 0.8);
-}/* Common Variables */
+/* Common Variables */
 :root {
     /* Light Mode Variables */
     --primary-bg-light-presidents: linear-gradient(-45deg, #ff9800, #f57c00, #ff7043, #ffab91);
     --primary-bg-light-events: linear-gradient(-45deg, #1a237e, #0d47a1, #2196f3, #bbdefb);
-    --card-bg-light: rgba(255, 255, 255, 0.1);
+    --card-bg-light: rgba(255, 255, 255, 0.25);
+    --card-bg-light-hover: rgba(255, 255, 255, 0.35);
     --text-color-light: white;
-    --btn-bg-light: rgba(255, 255, 255, 0.2);
-    --input-bg-light: rgba(255, 255, 255, 0.2);
-    --input-border-light: rgba(255, 255, 255, 0.3);
-    --card-shadow-light: 0 8px 32px rgba(0, 0, 0, 0.1);
+    --btn-bg-light: rgba(255, 255, 255, 0.3);
+    --input-bg-light: rgba(255, 255, 255, 0.3);
+    --input-border-light: rgba(255, 255, 255, 0.5);
+    --card-shadow-light: 0 8px 32px rgba(0, 0, 0, 0.15);
+    --card-border-light: 1px solid rgba(255, 255, 255, 0.3);
     
     /* Dark Mode Variables - Dark Navy/Orange/Gray Theme */
     --primary-bg-dark-presidents: linear-gradient(-45deg, #7a2800, #5e1e00, #4d1700, #3d1200);
     --primary-bg-dark-events: linear-gradient(-45deg, #000320, #041035, #061b4a, #091e54);
     --card-bg-dark: rgba(20, 20, 30, 0.8);
+    --card-bg-dark-hover: rgba(30, 30, 40, 0.8);
     --text-color-dark: #d0d0d0;
     --btn-bg-dark: rgba(30, 30, 40, 0.8);
     --input-bg-dark: rgba(25, 25, 35, 0.8);
     --input-border-dark: rgba(50, 50, 70, 0.5);
     --card-shadow-dark: 0 8px 32px rgba(0, 0, 0, 0.5);
+    --card-border-dark: 1px solid rgba(50, 50, 70, 0.3);
+    
+    /* Feedback and Status Colors */
+    --correct-bg-light: rgba(76, 175, 80, 0.3);
+    --correct-border-light: rgba(76, 175, 80, 0.8);
+    --correct-bg-dark: rgba(40, 80, 40, 0.5);
+    --correct-border-dark: rgba(60, 120, 60, 0.8);
+    
+    --wrong-bg-light: rgba(244, 67, 54, 0.3);
+    --wrong-border-light: rgba(244, 67, 54, 0.8);
+    --wrong-bg-dark: rgba(80, 40, 40, 0.5);
+    --wrong-border-dark: rgba(120, 60, 60, 0.8);
 }
 
 /* Theme Switch Styles */
@@ -153,6 +130,7 @@ body.dark-mode.events-mode {
 .container, .question-container, .flashcard-container, .game-area, .match-game-container {
     background: var(--card-bg-light);
     box-shadow: var(--card-shadow-light);
+    border: var(--card-border-light);
     transition: background 0.5s ease, box-shadow 0.5s ease;
 }
 
@@ -163,6 +141,7 @@ body.dark-mode .game-area,
 body.dark-mode .match-game-container {
     background: var(--card-bg-dark);
     box-shadow: var(--card-shadow-dark);
+    border: var(--card-border-dark);
 }
 
 h1, h2, h3, p, .question, .option, .card, .flashcard-front h2, .flashcard-back h2 {
@@ -196,7 +175,49 @@ body.dark-mode .reset-btn {
     background: var(--btn-bg-dark);
     color: var(--text-color-dark);
 }
+/* Fix for MCQ option circles to ensure they remain circular */
+.option-letter {
+    width: 30px;
+    height: 30px;
+    min-width: 30px; /* Prevents shrinking */
+    min-height: 30px; /* Prevents shrinking */
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px;
+    font-weight: 500;
+    flex-shrink: 0; /* Prevents shrinking */
+}
 
+/* For mobile devices */
+@media (max-width: 768px) {
+    .option-letter {
+        width: 28px;
+        height: 28px;
+        min-width: 28px;
+        min-height: 28px;
+        margin-right: 10px;
+        font-size: 0.9rem;
+    }
+    
+    .option {
+        align-items: flex-start; /* Align to top if content wraps */
+        padding: 12px 10px; /* Slightly reduced padding */
+    }
+}
+
+@media (max-width: 480px) {
+    .option-letter {
+        width: 26px;
+        height: 26px;
+        min-width: 26px;
+        min-height: 26px;
+        margin-right: 8px;
+        font-size: 0.8rem;
+    }
+}
 .answer-input, .option {
     background: var(--input-bg-light);
     border-color: var(--input-border-light);
@@ -209,4 +230,192 @@ body.dark-mode .option {
     background: var(--input-bg-dark);
     border-color: var(--input-border-dark);
     color: var(--text-color-dark);
+}
+
+/* Flashcards Specific Styling */
+.flashcard-front, .flashcard-back {
+    background: var(--card-bg-light);
+    box-shadow: var(--card-shadow-light);
+    border: var(--card-border-light);
+}
+
+body.dark-mode .flashcard-front, 
+body.dark-mode .flashcard-back {
+    background: var(--card-bg-dark);
+    box-shadow: var(--card-shadow-dark);
+    border: var(--card-border-dark);
+}
+
+/* Match Game Specific Styling */
+.card {
+    background: var(--card-bg-light);
+    box-shadow: var(--card-shadow-light);
+    border: var(--card-border-light);
+}
+
+.card.matched {
+    background: var(--correct-bg-light);
+    border-color: var(--correct-border-light);
+}
+
+.card.wrong {
+    background: var(--wrong-bg-light);
+    border-color: var(--wrong-border-light);
+}
+
+body.dark-mode .card {
+    background: var(--card-bg-dark);
+    box-shadow: var(--card-shadow-dark);
+    border: var(--card-border-dark);
+}
+
+body.dark-mode .card.matched {
+    background: var(--correct-bg-dark);
+    border-color: var(--correct-border-dark);
+}
+
+body.dark-mode .card.wrong {
+    background: var(--wrong-bg-dark);
+    border-color: var(--wrong-border-dark);
+}
+
+/* Card types for match game */
+.card-left {
+    background: rgba(33, 150, 243, 0.6) !important;
+    border: 2px solid rgba(33, 150, 243, 0.8) !important;
+}
+
+.card-right {
+    background: rgba(255, 152, 0, 0.6) !important;
+    border: 2px solid rgba(255, 152, 0, 0.8) !important;
+}
+
+body.dark-mode .card-left {
+    background: rgba(33, 150, 243, 0.3) !important;
+    border: 2px solid rgba(33, 150, 243, 0.5) !important;
+}
+
+body.dark-mode .card-right {
+    background: rgba(255, 152, 0, 0.3) !important;
+    border: 2px solid rgba(255, 152, 0, 0.5) !important;
+}
+
+/* Feedback Styling */
+.feedback.correct {
+    background: var(--correct-bg-light);
+    border: 1px solid var(--correct-border-light);
+}
+
+.feedback.wrong {
+    background: var(--wrong-bg-light);
+    border: 1px solid var(--wrong-border-light);
+}
+
+body.dark-mode .feedback.correct {
+    background: var(--correct-bg-dark);
+    border: 1px solid var(--correct-border-dark);
+}
+
+body.dark-mode .feedback.wrong {
+    background: var(--wrong-bg-dark);
+    border: 1px solid var(--wrong-border-dark);
+}
+
+/* MCQ Options Styling */
+.option.correct {
+    background: var(--correct-bg-light) !important;
+    border-color: var(--correct-border-light) !important;
+}
+
+.option.wrong {
+    background: var(--wrong-bg-light) !important;
+    border-color: var(--wrong-border-light) !important;
+}
+
+body.dark-mode .option.correct {
+    background: var(--correct-bg-dark) !important;
+    border-color: var(--correct-border-dark) !important;
+}
+
+body.dark-mode .option.wrong {
+    background: var(--wrong-bg-dark) !important;
+    border-color: var(--wrong-border-dark) !important;
+}
+
+/* Set dark mode as default on mobile */
+@media (max-width: 768px) {
+    body {
+        /* Default to dark mode on mobile */
+        background: var(--primary-bg-dark-events);
+    }
+    
+    body.presidents-mode {
+        background: var(--primary-bg-dark-presidents);
+    }
+    
+    body.events-mode {
+        background: var(--primary-bg-dark-events);
+    }
+    
+    .container, .question-container, .flashcard-container, .game-area, .match-game-container {
+        background: var(--card-bg-dark);
+        box-shadow: var(--card-shadow-dark);
+        border: var(--card-border-dark);
+    }
+    
+    h1, h2, h3, p, .question, .option, .card, .flashcard-front h2, .flashcard-back h2 {
+        color: var(--text-color-dark);
+    }
+    
+    .btn, .nav-btn, .control-btn, .back-btn, .reset-btn {
+        background: var(--btn-bg-dark);
+        color: var(--text-color-dark);
+    }
+    
+    .answer-input, .option {
+        background: var(--input-bg-dark);
+        border-color: var(--input-border-dark);
+        color: var(--text-color-dark);
+    }
+    
+    .flashcard-front, .flashcard-back {
+        background: var(--card-bg-dark);
+        box-shadow: var(--card-shadow-dark);
+        border: var(--card-border-dark);
+    }
+    
+    .card-left {
+        background: rgba(33, 150, 243, 0.3) !important;
+        border: 2px solid rgba(33, 150, 243, 0.5) !important;
+    }
+    
+    .card-right {
+        background: rgba(255, 152, 0, 0.3) !important;
+        border: 2px solid rgba(255, 152, 0, 0.5) !important;
+    }
+    
+    .feedback.correct {
+        background: var(--correct-bg-dark);
+        border: 1px solid var(--correct-border-dark);
+    }
+    
+    .feedback.wrong {
+        background: var(--wrong-bg-dark);
+        border: 1px solid var(--wrong-border-dark);
+    }
+    
+    .option.correct {
+        background: var(--correct-bg-dark) !important;
+        border-color: var(--correct-border-dark) !important;
+    }
+    
+    .option.wrong {
+        background: var(--wrong-bg-dark) !important;
+        border-color: var(--wrong-border-dark) !important;
+    }
+    
+    /* Automatically toggle the theme switch to dark mode */
+    #theme-toggle {
+        checked: true;
+    }
 }
