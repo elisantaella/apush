@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matching Game - APUSH Final Mastery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+        
+        body.presidents-mode {
+            background: linear-gradient(-45deg, #ff9800, #f57c00, #ff7043, #ffab91);
+        }
+        
+        body.events-mode {
+            background: linear-gradient(-45deg, #1a237e, #0d47a1, #2196f3, #bbdefb);
+        }
+        
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.5s ease;
+        }
+        
+        h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        p {
+            color: white;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .score-container {
+            margin-bottom: 20px;
+            color: white;
+            font-size: 1.2rem;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .game-area {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .card {
+            position: absolute;
+            width: 150px;
+            height: auto;
+            min-height: 80px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            cursor: move;
+            user-select: none;
+            transition: transform 0.3s ease, background 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
+            color: white;
+            text-align: center;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            word-wrap: break-word;
+            font-size: 14px;
+        }
+        
+        .card.dragging {
+            opacity: 0.8;
+            z-index: 10;
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card.matched {
+            background: rgba(76, 175, 80, 0.3);
+            border-color: rgba(76, 175, 80, 0.8);
+            pointer-events: none;
+            animation: fadeOut 1s ease forwards;
+        }
+        
+        .card.wrong {
+            background: rgba(244, 67, 54, 0.3);
+            border-color: rgba(244, 67, 54, 0.8);
+            animation: wrongMatch 0.5s ease;
+        }
+        
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0);
+            }
+        }
+        
+        @keyframes wrongMatch {
+            0% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-10px);
+            }
+            50% {
+                transform: translateX(10px);
+            }
+            75% {
+                transform: translateX(-5px);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+        
+        .card-left {
+            background: rgba(33, 150, 243, 0.3);
+        }
+        
+        .card-right {
+            background: rgba(255, 152, 0, 0.3);
+        }
+        
+        .feedback {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+            font-size: 1.1rem;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .feedback.correct {
+            background: rgba(76, 175, 80, 0.3);
+            opacity: 1;
+        }
+        
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .reset-btn, .play-again-btn {
+            padding: 12px 25px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        .reset-btn:hover, .play-again-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
+        
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            p {
+                font-size: 0.9rem;
+            }
+            
+            .game-area {
+                height: 600px; /* Taller game area for mobile */
+            }
+            
+            .card {
+                width: 120px; /* Slightly smaller cards */
+                min-height: 70px;
+                padding: 10px;
+                font-size: 12px;
+            }
+            
+            .container {
+                padding: 20px 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .game-area {
+                height: 700px; /* Even taller for very small screens */
+            }
+            
+            .card {
+                width: 100px; /* Even smaller cards */
+                min-height: 60px;
+                padding: 8px;
+                font-size: 11px;
+            }
+            
+            .reset-btn, .play-again-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="title">Matching Game</h1>
+        <p id="subtitle">Drag and drop items to their matching pairs</p>
+        
+        <div class="score-container">
+            Matches: <span id="matches">0</span> / <span id="total-matches">0</span>
+        </div>
+        
+        <div class="game-area" id="game-area">
+            <!-- Cards will be inserted here -->
+        </div>
+        
+        <div class="feedback" id="feedback"></div>
+        
+        <div class="button-container">
+            <button class="reset-btn" id="reset-btn">Reset Game</button>
+            <button class="play-again-btn" id="play-again-btn" style="display: none;">Play Again</button>
+        </div>
+        
+        <a href="#" class="back-btn" id="back-btn">Back to Selection</a>
+    </div>
+
+    <script src="theme.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get study type from localStorage
+            const studyType = localStorage.getItem('studyType') || 'presidents';
+            
+            // Add appropriate class to body based on study type
+            document.body.classList.add(studyType + '-mode');
+            
+            // Set back button href based on study type
+            document.getElementById('back-btn').href = studyType + '.html';
+            
+            // Update title based on study type
+            document.getElementById('title').textContent = studyType === 'presidents' ? 'Presidents Matching' : 'Pivotal Events Matching';
+            
+            // Update subtitle based on study type
+            if (studyType === 'presidents') {
+                document.getElementById('subtitle').textContent = 'Drag presidents to their key events';
+            } else {
+                document.getElementById('subtitle').textContent = 'Drag dates to their corresponding historical events';
+            }
+            
+            // Get data based on study type
+            const studyData = JSON.parse(localStorage.getItem(studyType + 'Data')) || [];
+            
+            let matches = 0;
+            let currentDraggingElement = null;
+            let matchedPairs = [];
+            let numPairs = 6; // Number of pairs to use in the game
+            let shuffledData = [];
+            let totalMatches = 0;
+            
+            // Function to shuffle and prepare game data
+            const prepareGameData = () => {
+                // Reset game state
+                matches = 0;
+                document.getElementById('matches').textContent = '0';
+                
+                // Shuffle all data and get a subset for this game
+                shuffledData = [...studyData]
+                    .sort(() => Math.random() - 0.5)
+                    .slice(0, numPairs);
+                
+                totalMatches = shuffledData.length;
+                document.getElementById('total-matches').textContent = totalMatches;
+                
+                // Hide play again button, show reset button
+                document.getElementById('play-again-btn').style.display = 'none';
+                document.getElementById('reset-btn').style.display = 'inline-block';
+                
+                // Clear feedback
+                const feedback = document.getElementById('feedback');
+                feedback.className = 'feedback';
+                feedback.textContent = '';
+            };
+            
+            // Function to calculate grid layout based on screen size
+            const calculateGridLayout = () => {
+                const gameArea = document.getElementById('game-area');
+                const gameWidth = gameArea.clientWidth;
+                const gameHeight = gameArea.clientHeight;
+                
+                // Responsive card sizing
+                let cardWidth = 150;
+                let cardHeight = 100;
+                
+                // Adjust card size based on screen width
+                if (window.innerWidth <= 768) {
+                    cardWidth = 120;
+                    cardHeight = 80;
+                }
+                if (window.innerWidth <= 480) {
+                    cardWidth = 100;
+                    cardHeight = 70;
+                }
+                
+                // Calculate padding
+                const padding = Math.max(10, Math.min(20, gameWidth * 0.05));
+                
+                // Calculate columns and rows based on available space
+                const maxColumns = Math.floor((gameWidth - padding) / (cardWidth + padding));
+                const columns = Math.min(maxColumns, 3); // Max 3 columns
+                
+                // Calculate how many rows we need
+                const totalCards = numPairs * 2;
+                const rows = Math.ceil(totalCards / columns);
+                
+                return {
+                    columns,
+                    rows,
+                    cardWidth,
+                    cardHeight,
+                    padding,
+                    totalCards
+                };
+            };
+            
+            // Function to create a grid layout for cards
+            const createGridLayout = () => {
+                const gameArea = document.getElementById('game-area');
+                const grid = calculateGridLayout();
+                
+                // Create positions for cards in a grid layout
+                const positions = [];
+                
+                // Calculate horizontal and vertical spacing
+                const hSpacing = (gameArea.clientWidth - (grid.cardWidth * grid.columns)) / (grid.columns + 1);
+                const vSpacing = (gameArea.clientHeight - (grid.cardHeight * grid.rows)) / (grid.rows + 1);
+                
+                // Generate positions based on the grid
+                for (let row = 0; row < grid.rows; row++) {
+                    for (let col = 0; col < grid.columns; col++) {
+                        // Skip positions beyond what we need
+                        if (positions.length >= grid.totalCards) break;
+                        
+                        const x = hSpacing + col * (grid.cardWidth + hSpacing);
+                        const y = vSpacing + row * (grid.cardHeight + vSpacing);
+                        
+                        positions.push({ x, y });
+                    }
+                }
+                
+                // Shuffle positions
+                return positions.sort(() => Math.random() - 0.5);
+            };
+            
+            // Function to create cards
+            const createCards = () => {
+                const gameArea = document.getElementById('game-area');
+                
+                // Clear game area
+                gameArea.innerHTML = '';
+                
+                // Get grid positions for all cards
+                const positions = createGridLayout();
+                
+                // Grid settings for responsive cards
+                const grid = calculateGridLayout();
+                
+                if (studyType === 'presidents') {
+                    // For presidents: left = president name, right = event
+                    shuffledData.forEach((item, index) => {
+                        // Create left card (president name)
+                        const leftCard = document.createElement('div');
+                        leftCard.className = 'card card-left';
+                        leftCard.textContent = item.name;
+                        leftCard.dataset.id = index;
+                        leftCard.dataset.type = 'left';
+                        leftCard.style.width = `${grid.cardWidth}px`;
+                        leftCard.style.left = `${positions[index*2].x}px`;
+                        leftCard.style.top = `${positions[index*2].y}px`;
+                        makeCardDraggable(leftCard);
+                        gameArea.appendChild(leftCard);
+                        
+                        // Create right card (event)
+                        const rightCard = document.createElement('div');
+                        rightCard.className = 'card card-right';
+                        rightCard.textContent = item.event;
+                        rightCard.dataset.id = index;
+                        rightCard.dataset.type = 'right';
+                        rightCard.style.width = `${grid.cardWidth}px`;
+                        rightCard.style.left = `${positions[index*2+1].x}px`;
+                        rightCard.style.top = `${positions[index*2+1].y}px`;
+                        makeCardDraggable(rightCard);
+                        gameArea.appendChild(rightCard);
+                    });
+                } else {
+                    // For events: left = year, right = event
+                    shuffledData.forEach((item, index) => {
+                        // Create left card (year)
+                        const leftCard = document.createElement('div');
+                        leftCard.className = 'card card-left';
+                        leftCard.textContent = item.year;
+                        leftCard.dataset.id = index;
+                        leftCard.dataset.type = 'left';
+                        leftCard.style.width = `${grid.cardWidth}px`;
+                        leftCard.style.left = `${positions[index*2].x}px`;
+                        leftCard.style.top = `${positions[index*2].y}px`;
+                        makeCardDraggable(leftCard);
+                        gameArea.appendChild(leftCard);
+                        
+                        // Create right card (event)
+                        const rightCard = document.createElement('div');
+                        rightCard.className = 'card card-right';
+                        rightCard.textContent = item.event;
+                        rightCard.dataset.id = index;
+                        rightCard.dataset.type = 'right';
+                        rightCard.style.width = `${grid.cardWidth}px`;
+                        rightCard.style.left = `${positions[index*2+1].x}px`;
+                        rightCard.style.top = `${positions[index*2+1].y}px`;
+                        makeCardDraggable(rightCard);
+                        gameArea.appendChild(rightCard);
+                    });
+                }
+            };
+            
+            // Function to make a card draggable
+            const makeCardDraggable = (card) => {
+                let offsetX, offsetY;
+                let startX, startY;
+                
+                const onMouseDown = (e) => {
+                    // Skip if card is already matched
+                    if (card.classList.contains('matched')) return;
+                    
+                    // Calculate offset
+                    const rect = card.getBoundingClientRect();
+                    offsetX = e.clientX - rect.left;
+                    offsetY = e.clientY - rect.top;
+                    
+                    // Store starting position
+                    startX = rect.left;
+                    startY = rect.top;
+                    
+                    // Add dragging class
+                    card.classList.add('dragging');
+                    currentDraggingElement = card;
+                    
+                    // Add event listeners for dragging
+                    document.addEventListener('mousemove', onMouseMove);
+                    document.addEventListener('mouseup', onMouseUp);
+                    
+                    // Prevent default behavior
+                    e.preventDefault();
+                };
+                
+                const onMouseMove = (e) => {
+                    const gameArea = document.getElementById('game-area');
+                    const gameRect = gameArea.getBoundingClientRect();
+                    
+                    // Calculate new position within game area boundaries
+                    let newX = e.clientX - gameRect.left - offsetX;
+                    let newY = e.clientY - gameRect.top - offsetY;
+                    
+                    // Ensure card stays within game area
+                    newX = Math.max(0, Math.min(newX, gameRect.width - parseInt(card.style.width)));
+                    newY = Math.max(0, Math.min(newY, gameRect.height - card.offsetHeight));
+                    
+                    // Update position
+                    card.style.left = `${newX}px`;
+                    card.style.top = `${newY}px`;
+                };
+                
+                const onMouseUp = () => {
+                    // Remove dragging class
+                    card.classList.remove('dragging');
+                    
+                    // Check for collision with matching card
+                    checkCollision(card);
+                    
+                    // Remove event listeners
+                    document.removeEventListener('mousemove', onMouseMove);
+                    document.removeEventListener('mouseup', onMouseUp);
+                    
+                    currentDraggingElement = null;
+                };
+                
+                const onTouchStart = (e) => {
+                    // Skip if card is already matched
+                    if (card.classList.contains('matched')) return;
+                    
+                    const touch = e.touches[0];
+                    const rect = card.getBoundingClientRect();
+                    
+                    // Calculate offset
+                    offsetX = touch.clientX - rect.left;
+                    offsetY = touch.clientY - rect.top;
+                    
+                    // Store starting position
+                    startX = rect.left;
+                    startY = rect.top;
+                    
+                    // Add dragging class
+                    card.classList.add('dragging');
+                    currentDraggingElement = card;
+                    
+                    // Prevent default to avoid scrolling
+                    e.preventDefault();
+                };
+                
+                const onTouchMove = (e) => {
+                    if (currentDraggingElement !== card) return;
+                    
+                    const touch = e.touches[0];
+                    const gameArea = document.getElementById('game-area');
+                    const gameRect = gameArea.getBoundingClientRect();
+                    
+                    // Calculate new position within game area boundaries
+                    let newX = touch.clientX - gameRect.left - offsetX;
+                    let newY = touch.clientY - gameRect.top - offsetY;
+                    
+                    // Ensure card stays within game area
+                    newX = Math.max(0, Math.min(newX, gameRect.width - parseInt(card.style.width)));
+                    newY = Math.max(0, Math.min(newY, gameRect.height - card.offsetHeight));
+                    
+                    // Update position
+                    card.style.left = `${newX}px`;
+                    card.style.top = `${newY}px`;
+                    
+                    // Prevent default to avoid scrolling
+                    e.preventDefault();
+                };
+                
+                const onTouchEnd = (e) => {
+                    if (currentDraggingElement !== card) return;
+                    
+                    // Remove dragging class
+                    card.classList.remove('dragging');
+                    
+                    // Check for collision with matching card
+                    checkCollision(card);
+                    
+                    currentDraggingElement = null;
+                    
+                    // Prevent default
+                    e.preventDefault();
+                };
+                
+                // Add mouse events
+                card.addEventListener('mousedown', onMouseDown);
+                
+                // Add touch events
+                card.addEventListener('touchstart', onTouchStart, { passive: false });
+                card.addEventListener('touchmove', onTouchMove, { passive: false });
+                card.addEventListener('touchend', onTouchEnd, { passive: false });
+            };
+            
+            // Function to check collision between cards
+            const checkCollision = (card) => {
+                const cardRect = card.getBoundingClientRect();
+                const cardId = card.dataset.id;
+                const cardType = card.dataset.type;
+                
+                // Find potential matching card (opposite type, same id)
+                const matchingCard = document.querySelector(`.card[data-id="${cardId}"][data-type="${cardType === 'left' ? 'right' : 'left'}"]`);
+                
+                if (matchingCard && !matchingCard.classList.contains('matched')) {
+                    const matchRect = matchingCard.getBoundingClientRect();
+                    
+                    // Check for collision
+                    if (
+                        cardRect.left < matchRect.right &&
+                        cardRect.right > matchRect.left &&
+                        cardRect.top < matchRect.bottom &&
+                        cardRect.bottom > matchRect.top
+                    ) {
+                        // It's a match!
+                        handleMatch(card, matchingCard);
+                    } else {
+                        // Check for collision with any wrong card
+                        const wrongCard = checkWrongCollision(card, cardId, cardType);
+                        if (wrongCard) {
+                            handleWrongMatch(card, wrongCard);
+                        }
+                    }
+                }
+            };
+            
+            // Check collision with any wrong card
+            const checkWrongCollision = (card, cardId, cardType) => {
+                const cardRect = card.getBoundingClientRect();
+                let collidedWrongCard = null;
+                
+                document.querySelectorAll(`.card[data-type="${cardType === 'left' ? 'right' : 'left'}"]`).forEach(otherCard => {
+                    if (otherCard.dataset.id !== cardId && !otherCard.classList.contains('matched')) {
+                        const otherRect = otherCard.getBoundingClientRect();
+                        
+                        if (
+                            cardRect.left < otherRect.right &&
+                            cardRect.right > otherRect.left &&
+                            cardRect.top < otherRect.bottom &&
+                            cardRect.bottom > otherRect.top
+                        ) {
+                            collidedWrongCard = otherCard;
+                        }
+                    }
+                });
+                
+                return collidedWrongCard;
+            };
+            
+            // Function to handle a successful match
+            const handleMatch = (card1, card2) => {
+                // Mark cards as matched
+                card1.classList.add('matched');
+                card2.classList.add('matched');
+                
+                // Update match count
+                matches++;
+                document.getElementById('matches').textContent = matches;
+                
+                // Show feedback
+                const feedback = document.getElementById('feedback');
+                feedback.className = 'feedback correct';
+                feedback.textContent = 'Great match! ✓';
+                
+                // Animate feedback
+                feedback.animate([
+                    { opacity: 0, transform: 'translateY(-10px)' },
+                    { opacity: 1, transform: 'translateY(0)' }
+                ], {
+                    duration: 300,
+                    fill: 'forwards',
+                    easing: 'ease-out'
+                });
+                
+                // Check if game is complete
+                if (matches === totalMatches) {
+                    // Show completion message after cards fade out
+                    setTimeout(() => {
+                        document.getElementById('game-area').innerHTML = `
+                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                                <h2 style="color: white; margin-bottom: 20px; font-size: 2rem;">Great Job!</h2>
+                                <p style="color: white; font-size: 1.2rem;">
+                                    You've successfully matched all items!
+                                </p>
+                            </div>
+                        `;
+                        
+                        // Update feedback
+                        feedback.textContent = 'You completed all matches! 🎉';
+                        
+                        // Show play again button, hide reset button
+                        document.getElementById('reset-btn').style.display = 'none';
+                        document.getElementById('play-again-btn').style.display = 'inline-block';
+                    }, 1500);
+                }
+            };
+            
+            // Function to get available positions for cards
+            const getAvailablePositions = () => {
+                // Create a new set of positions while avoiding current matched cards
+                const positions = createGridLayout();
+                return positions;
+            };
+            
+            // Function to handle an incorrect match
+            const handleWrongMatch = (card1, card2) => {
+                // Add wrong class temporarily
+                card1.classList.add('wrong');
+                card2.classList.add('wrong');
+                
+                // Remove wrong class after animation
+                setTimeout(() => {
+                    card1.classList.remove('wrong');
+                    card2.classList.remove('wrong');
+                    
+                    // Get new positions for the cards
+                    const newPositions = getAvailablePositions();
+                    
+                    // Move cards to new positions if available
+                    if (newPositions.length >= 2) {
+                        card1.style.left = `${newPositions[0].x}px`;
+                        card1.style.top = `${newPositions[0].y}px`;
+                        
+                        card2.style.left = `${newPositions[1].x}px`;
+                        card2.style.top = `${newPositions[1].y}px`;
+                    } else {
+                        // As a fallback, generate some random positions
+                        const gameArea = document.getElementById('game-area');
+                        const width = gameArea.clientWidth - parseInt(card1.style.width) - 20;
+                        const height = gameArea.clientHeight - card1.offsetHeight - 20;
+                        
+                        // Ensure cards are placed in different halves of the game area
+                        card1.style.left = `${Math.floor(Math.random() * (width/2)) + 10}px`;
+                        card1.style.top = `${Math.floor(Math.random() * height) + 10}px`;
+                        
+                        card2.style.left = `${Math.floor(Math.random() * (width/2) + width/2) + 10}px`;
+                        card2.style.top = `${Math.floor(Math.random() * height) + 10}px`;
+                    }
+                }, 500);
+            };
+            
+            // Reset game
+            const resetGame = () => {
+                matches = 0;
+                document.getElementById('matches').textContent = matches;
+                
+                document.getElementById('feedback').className = 'feedback';
+                document.getElementById('feedback').textContent = '';
+                
+                createCards();
+            };
+            
+            // Start a new game with different items
+            const playAgain = () => {
+                prepareGameData();
+                createCards();
+            };
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                if (matches < totalMatches) {
+                    // Only rearrange cards if game is in progress
+                    const positions = createGridLayout();
+                    const grid = calculateGridLayout();
+                    
+                    // Update all non-matched cards with new positions
+                    document.querySelectorAll('.card:not(.matched)').forEach((card, index) => {
+                        card.style.width = `${grid.cardWidth}px`;
+                        card.style.left = `${positions[index].x}px`;
+                        card.style.top = `${positions[index].y}px`;
+                    });
+                }
+            });
+            
+            // Initialize game
+            prepareGameData();
+            createCards();
+            
+            // Add event listener for reset button
+            document.getElementById('reset-btn').addEventListener('click', resetGame);
+            
+            // Add event listener for play again button
+            document.getElementById('play-again-btn').addEventListener('click', playAgain);
+            
+            // Add fade-in animation
+            const container = document.querySelector('.container');
+            container.style.opacity = '0';
+            container.style.transition = 'opacity 0.8s ease';
+            
+            setTimeout(() => {
+                container.style.opacity = '1';
+            }, 200);
+        });
+    </script>
+</body>
+</html>

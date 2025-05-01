@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APUSH Final Mastery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        :root {
+            --primary-bg-light: linear-gradient(-45deg, #1a237e, #0d47a1, #2196f3, #bbdefb);
+            --primary-bg-dark: linear-gradient(-45deg, #000428, #0b1642, #193175, #0c407e);
+            --card-bg-light: rgba(255, 255, 255, 0.1);
+            --card-bg-dark: rgba(0, 0, 0, 0.3);
+            --text-color-light: white;
+            --text-color-dark: #e0e0e0;
+            --btn-presidents-light: linear-gradient(45deg, #ff9800, #f57c00);
+            --btn-presidents-dark: linear-gradient(45deg, #e65100, #bf360c);
+            --btn-events-light: linear-gradient(45deg, #2196f3, #1976d2);
+            --btn-events-dark: linear-gradient(45deg, #0d47a1, #01579b);
+            --btn-exams-light: linear-gradient(45deg, #9c27b0, #7b1fa2);
+            --btn-exams-dark: linear-gradient(45deg, #6a1b9a, #4a148c);
+        }
+        
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            background: var(--primary-bg-light);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            transition: background 0.5s ease;
+        }
+        
+        body.dark-mode {
+            background: var(--primary-bg-dark);
+        }
+        
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+            padding: 40px;
+            background: var(--card-bg-light);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transform: translateY(0);
+            animation: float 6s ease-in-out infinite;
+            transition: background 0.5s ease;
+        }
+        
+        body.dark-mode .container {
+            background: var(--card-bg-dark);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+        
+        h1 {
+            color: var(--text-color-light);
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: color 0.5s ease;
+        }
+        
+        body.dark-mode h1 {
+            color: var(--text-color-dark);
+        }
+        
+        p {
+            color: var(--text-color-light);
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            transition: color 0.5s ease;
+        }
+        
+        body.dark-mode p {
+            color: var(--text-color-dark);
+        }
+        
+        .btn-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--text-color-light);
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        body.dark-mode .btn {
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--text-color-dark);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.3));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s ease;
+            z-index: -1;
+        }
+        
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn:hover:before {
+            transform: scaleX(1);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-presidents {
+            background: var(--btn-presidents-light);
+        }
+        
+        body.dark-mode .btn-presidents {
+            background: var(--btn-presidents-dark);
+        }
+        
+        .btn-events {
+            background: var(--btn-events-light);
+        }
+        
+        body.dark-mode .btn-events {
+            background: var(--btn-events-dark);
+        }
+        
+        .btn-exams {
+            background: var(--btn-exams-light);
+        }
+        
+        body.dark-mode .btn-exams {
+            background: var(--btn-exams-dark);
+        }
+        
+        .theme-switch-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .theme-switch {
+            display: inline-block;
+            height: 30px;
+            position: relative;
+            width: 60px;
+            margin-right: 10px;
+        }
+        
+        .theme-switch input {
+            display: none;
+        }
+        
+        .slider {
+            background-color: rgba(255, 255, 255, 0.3);
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+        }
+        
+        .slider:before {
+            background-color: white;
+            bottom: 4px;
+            content: "";
+            height: 22px;
+            left: 4px;
+            position: absolute;
+            transition: .4s;
+            width: 22px;
+        }
+        
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(30px);
+        }
+        
+        .slider.round {
+            border-radius: 34px;
+        }
+        
+        .slider.round:before {
+            border-radius: 50%;
+        }
+        
+        .theme-label {
+            color: var(--text-color-light);
+            font-size: 0.9rem;
+            transition: color 0.5s ease;
+        }
+        
+        body.dark-mode .theme-label {
+            color: var(--text-color-dark);
+        }
+        
+        .btn-glow {
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            }
+            to {
+                box-shadow: 0 0 20px rgba(255, 255, 255, 0.9);
+            }
+        }
+        
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            p {
+                font-size: 1rem;
+            }
+            
+            .btn {
+                width: 100%;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>APUSH Final Mastery</h1>
+        <p>Get a 5 on Mr. Croll's Final Exam!</p>
+        <p>Made by Eli Santaella</p>
+
+        
+        <div class="theme-switch-wrapper">
+            <label class="theme-switch" for="theme-toggle">
+                <input type="checkbox" id="theme-toggle" />
+                <div class="slider round"></div>
+            </label>
+            <span class="theme-label">Dark Mode</span>
+        </div>
+        
+        <div class="btn-container">
+            <a href="presidents.html" class="btn btn-presidents btn-glow">Study Presidents</a>
+            <a href="events.html" class="btn btn-events btn-glow">Study Pivotal Events</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check for saved theme preference or use default (light)
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            
+            // If saved theme is dark, apply it
+            if (currentTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('theme-toggle').checked = true;
+            }
+            
+            // Add parallax effect
+            document.addEventListener('mousemove', (e) => {
+                const x = e.clientX / window.innerWidth;
+                const y = e.clientY / window.innerHeight;
+                
+                document.querySelector('.container').style.transform = 
+                    `translateY(${-15 * y}px) translateX(${-15 * x}px)`;
+            });
+            
+            // Add fade-in animation
+            const container = document.querySelector('.container');
+            container.style.opacity = '0';
+            container.style.transition = 'opacity 1s ease';
+            
+            setTimeout(() => {
+                container.style.opacity = '1';
+            }, 200);
+            
+            // Handle theme toggle
+            document.getElementById('theme-toggle').addEventListener('change', function() {
+                if (this.checked) {
+                    document.body.classList.add('dark-mode');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    document.body.classList.remove('dark-mode');
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

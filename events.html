@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Pivotal Events - APUSH Final Mastery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            background: linear-gradient(-45deg, #1a237e, #0d47a1, #2196f3, #bbdefb);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+        
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.5s ease;
+        }
+        
+        h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        p {
+            color: white;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modes-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .mode-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .mode-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 0.25);
+        }
+        
+        .mode-card h3 {
+            color: white;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+        
+        .mode-card p {
+            font-size: 0.9rem;
+            margin-bottom: 0;
+        }
+        
+        .mode-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: white;
+        }
+        
+        .back-btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
+        
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .modes-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Study Pivotal Events</h1>
+        <p>Select a study mode to master key American historical events from 1453-2001</p>
+        
+        <div class="modes-container">
+            <div class="mode-card" onclick="startMode('flashcards')">
+                <div class="mode-icon">🔄</div>
+                <h3>Flashcards</h3>
+                <p>Flip cards to test your knowledge of key historical dates and events</p>
+            </div>
+            
+            <div class="mode-card" onclick="startMode('mcq')">
+                <div class="mode-icon">📝</div>
+                <h3>Multiple Choice</h3>
+                <p>Test your knowledge with random multiple choice questions</p>
+            </div>
+            
+            <div class="mode-card" onclick="startMode('fillblank')">
+                <div class="mode-icon">✏️</div>
+                <h3>Fill in the Blank</h3>
+                <p>Type answers to complete statements about historical events</p>
+            </div>
+            
+            <div class="mode-card" onclick="startMode('match')">
+                <div class="mode-icon">🔗</div>
+                <h3>Match Game</h3>
+                <p>Connect dates with the correct historical events</p>
+            </div>
+        </div>
+        
+        <a href="index.html" class="back-btn">Back to Home</a>
+    </div>
+
+    <script>
+        // Parse the provided pivotal events data
+        const eventsRawData = [
+            { year: "1453", event: "Ottomans conquer Constantinople" },
+            { year: "1491", event: "Pre-Columbian life in the Americas" },
+            { year: "1492", event: "Columbus discovers North America" },
+            { year: "1521", event: "Conquest of Mexico by Cortes" },
+            { year: "1588", event: "Spanish Armada defeated by England" },
+            { year: "1607", event: "Jamestown founded (1st permanent British colony)" },
+            { year: "1608", event: "Quebec founded (French colony)" },
+            { year: "1619", event: "First blacks arrive in Virginia from Africa; House of Burgesses established" },
+            { year: "1620", event: "Pilgrims found Plymouth, Mass" },
+            { year: "1629", event: "Puritans found Mass. Bay Colony" },
+            { year: "1630-1642", event: "Great English Migration" },
+            { year: "1649", event: "Maryland Toleration Act" },
+            { year: "1676", event: "Bacon's Rebellion and King Philip's War" },
+            { year: "1692", event: "Salem Witch Trials" },
+            { year: "1730s", event: "(1st) Great Awakening" },
+            { year: "1734", event: "Zenger Trial" },
+            { year: "1754", event: "Albany Plan; French and Indian War begins" },
+            { year: "1763", event: "Treaty of Paris of 1763; Pontiac's Rebellion; Proclamation of 1763; end of salutary neglect" },
+            { year: "1764", event: "Sugar Act (first tax on colonists imposed by Great Britain)" },
+            { year: "1765", event: "Stamp Act" },
+            { year: "1766", event: "Repeal of Stamp Act; Declaratory Act" },
+            { year: "1770", event: "Boston Massacre" },
+            { year: "1772", event: "Pine Tree Rebellion" },
+            { year: "1773", event: "Boston Tea Party" },
+            { year: "1774", event: "\"Intolerable Acts\"; First Continental Congress" },
+            { year: "1775", event: "Lexington and Concord; Second Continental Congress; \"the shot heard round the world\"" },
+            { year: "July 4, 1776", event: "Declaration of Independence" },
+            { year: "1783", event: "Treaty of Paris ending the War of the American Revolution" },
+            { year: "1786", event: "Shays Rebellion" },
+            { year: "1787", event: "Constitutional Convention; Northwest Ordinance (of 1787)" },
+            { year: "1789", event: "U.S. government formed under the Constitution; Pres. Washington Inaugurated; French Revolution begins" },
+            { year: "1791", event: "Bill of Rights added to Constitution; Samuel Slater builds first U.S. textile factory" },
+            { year: "1793", event: "Eli Whitney invents cotton gin; Washington issued the Neutrality Proclamation" },
+            { year: "1798", event: "XYZ Affair; Alien and Sedition Acts; Virgninia and Kentucky Resolutions" },
+            { year: "1800", event: "Jefferson elected to his first term as President (3rd Pres; Democratic-Republican)" },
+            { year: "1803", event: "Louisiana Purchase; Marbury v. Madison" },
+            { year: "1807", event: "Robert Fulton's steamboat; Jefferson's Embargo" },
+            { year: "1808", event: "importation of slaves is illegal" },
+            { year: "1812", event: "War of 1812 begins" },
+            { year: "1814", event: "Treaty of Ghent ends the War of 1812; Hartford Convention → killed the Federalist Party → Era of Good Feelings" },
+            { year: "1815", event: "Battle of New Orleans → Era of Nationalism" },
+            { year: "1819", event: "Florida Purchase (Adams-Onis) Treaty" },
+            { year: "1820", event: "Missouri Compromise (Missouri and Maine and 36 degrees 30 minutes)" },
+            { year: "1823", event: "Monroe Doctrine" },
+            { year: "1825", event: "Erie Canal completed" },
+            { year: "1828", event: "Andrew Jackson elected to his first term as President (7th Pres; first Democrat)" },
+            { year: "1828", event: "first railroad line in U.S. (B & O Railroad); Tariff of Abominations passed" },
+            { year: "1830", event: "Second Great Awakening peaks; mower reaper; Indian Removal Act" },
+            { year: "1831", event: "William Lloyd Garrison's Liberator & Nat Turner's Rebellion (Underground Railroad)" },
+            { year: "1834", event: "Slavery abolished in British Empire" },
+            { year: "1835-1836", event: "Texas War of Independence/Texas Revolution" },
+            { year: "1837", event: "Deere invented steel plow; economic Panic" },
+            { year: "1838", event: "Trail of Tears" },
+            { year: "1844", event: "telegraph invented by Samuel Morse" },
+            { year: "1845", event: "Texas annexed to the United States as a slave state" },
+            { year: "1846", event: "Oregon Treaty; sewing machine invented; Mexican War begins; Wilmot Proviso introduced in Congress" },
+            { year: "1848", event: "Treaty of Guadalupe Hidalgo; Seneca Falls Convention; Great Potato Famine; Gold is discovered in N. CA" },
+            { year: "1849", event: "California Gold Rush" },
+            { year: "1850", event: "Compromise of 1850" },
+            { year: "1852", event: "Uncle Tom's Cabin written by Harriet Beecher Stowe" },
+            { year: "1854", event: "Kansas-Nebraska Act; Republican Party formed" },
+            { year: "1857", event: "Dred Scott decision; economic Panic" },
+            { year: "1859", event: "John Brown's Raid" },
+            { year: "1860", event: "Election of Abraham Lincoln" },
+            { year: "1861", event: "Fort Sumter fired on; Civil War begins" },
+            { year: "1862", event: "Homestead Act passed; the Pacific Railroad Act; Battle of Antietam" },
+            { year: "1863", event: "Emancipation Proclamation; Battle of Gettysburg; Lincoln's Gettysburg Address" },
+            { year: "1864", event: "Atlanta falls to Union forces" },
+            { year: "1865", event: "Lee surrenders to Grant at Appomattox; Civil War ends; Lincoln assassinated; 13th Amendment ratified" },
+            { year: "1866", event: "Midterm election of 1866/Radical Republicans prevail; Ku Klux Klan is established" },
+            { year: "1867", event: "Reconstruction Act of 1867; Alaska purchase \"Seward's Folly / Icebox\"" },
+            { year: "1868", event: "14th Amendment to Const. ratified" },
+            { year: "1869", event: "Transcontinental Railroad completed" },
+            { year: "1870", event: "15th Amendment to Const. ratified" },
+            { year: "1873", event: "Panic of 1873" },
+            { year: "1876", event: "telephone invented - Tilden/Hayes election; Battle of the Little BigHorn aka Custer's Last Stand" },
+            { year: "1877", event: "Compromise of 1877/Reconstruction ends; Great railroad strike" },
+            { year: "1879", event: "Edison invents light bulb" },
+            { year: "1881", event: "\"A Century of Dishonor\"" },
+            { year: "1882", event: "Chinese Exclusion Act" },
+            { year: "1886", event: "Haymarket Square Riot" },
+            { year: "1890", event: "Sherman Anti-Trust Act passed; Wounded Knee; US Census - frontier closed; \"How the Other Half Lives\"; NAWSA formed" },
+            { year: "1893", event: "Panic of 1893" },
+            { year: "1896", event: "Election of 1896; Plessy case decided by U.S. Supreme Court (Plessy v. Ferguson)" },
+            { year: "1898", event: "Spanish-American War; annexation of Hawaii" },
+            { year: "1901", event: "Theodore Roosevelt becomes President" },
+            { year: "1911", event: "Triangle Shirtwaist Fire" },
+            { year: "1914", event: "World War I starts in Europe; Clayton Antitrust Act; Panama Canal Opens" },
+            { year: "1917", event: "U.S. enters World War I; Russian Revolution" },
+            { year: "1918", event: "World War I ends" },
+            { year: "1919", event: "Versailles Treaty; 18th Amendment" },
+            { year: "1920", event: "19th Amendment ratified; Census of 1920 (half of Americans live in cities)" },
+            { year: "1927", event: "First \"talkie\" The Jazz Singer" },
+            { year: "1929", event: "Stock market crash" },
+            { year: "1932", event: "FDR elected 32nd President" },
+            { year: "1933", event: "FDR inaugurated; New Deal begins; Hitler comes to power in Germany" },
+            { year: "1937", event: "Japan invades China" },
+            { year: "1939", event: "Hitler invades Poland; World War II starts in Europe" },
+            { year: "Dec. 7, 1941", event: "Pearl Harbor attacked" },
+            { year: "June 6, 1944", event: "D-Day" },
+            { year: "1945", event: "World War II ends; A-bombs used against Japan" },
+            { year: "1948-49", event: "the Berlin Blockade → Berlin Airlift" },
+            { year: "1949", event: "Communist Revolution in China; Soviets detonate A-bomb; NATO established" },
+            { year: "1950", event: "Korean War begins" },
+            { year: "1953", event: "Korean War ends" },
+            { year: "1954", event: "Brown v. Board of Education; Battle of Dien Bien Phu" },
+            { year: "1955", event: "Rosa Parks; Montgomery Bus Boycott; Warsaw Pact" },
+            { year: "1957", event: "Sputnik; Central High School in Little Rock" },
+            { year: "1962", event: "Cuban Missile Crisis" },
+            { year: "1963", event: "Birmingham demonstrations; March on Washington; JFK assassinated" },
+            { year: "1964", event: "Gulf of Tonkin Resolution; Civil Rights Act" },
+            { year: "1965", event: "Selma demonstrations; Voting Rights Act" },
+            { year: "1968", event: "Tet Offensive; assassinations (Dr. King and RFK), Nixon wins presidency" },
+            { year: "1969", event: "moon landing" },
+            { year: "1973", event: "Roe v. Wade" },
+            { year: "1974", event: "Watergate forces Nixon resignation" },
+            { year: "1975", event: "Saigon, South Vietnam, falls to North Vietnamese troops" },
+            { year: "1980", event: "Pres. Reagan elected" },
+            { year: "1989", event: "Berlin Wall falls" },
+            { year: "1990", event: "Saddam Hussein's Iraq invades Kuwait; Persian Gulf War begins" },
+            { year: "2001", event: "WTC attacks; War on Terror begins" }
+        ];
+
+        // Save events data to localStorage for use in study modes
+        localStorage.setItem('eventsData', JSON.stringify(eventsRawData));
+        
+        function startMode(mode) {
+            // Set study type to events
+            localStorage.setItem('studyType', 'events');
+            
+            // Navigate to the appropriate mode page
+            switch(mode) {
+                case 'flashcards':
+                    window.location.href = 'flashcards.html';
+                    break;
+                case 'mcq':
+                    window.location.href = 'mcq.html';
+                    break;
+                case 'fillblank':
+                    window.location.href = 'fillintheblank.html';
+                    break;
+                case 'match':
+                    window.location.href = 'match.html';
+                    break;
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add fade-in animation
+            const container = document.querySelector('.container');
+            container.style.opacity = '0';
+            container.style.transition = 'opacity 0.8s ease';
+            
+            setTimeout(() => {
+                container.style.opacity = '1';
+            }, 200);
+            
+            // Add subtle parallax effect
+            document.addEventListener('mousemove', (e) => {
+                const x = e.clientX / window.innerWidth;
+                const y = e.clientY / window.innerHeight;
+                
+                document.querySelectorAll('.mode-card').forEach(card => {
+                    const depth = 15;
+                    const moveX = (x - 0.5) * depth;
+                    const moveY = (y - 0.5) * depth;
+                    
+                    card.style.transform = `translateX(${moveX}px) translateY(${moveY}px)`;
+                });
+            });
+        });
+    </script>
+</body>
+</html>

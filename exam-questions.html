@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AP Exam Questions - APUSH Final Mastery</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: 'Poppins', sans-serif;
+}
+
+body {
+min-height: 100vh;
+display: flex;
+justify-content: center;
+align-items: center;
+overflow-x: hidden;
+background: linear-gradient(-45deg, #4a148c, #7b1fa2, #9c27b0, #ce93d8);
+background-size: 400% 400%;
+animation: gradientBG 15s ease infinite;
+}
+
+body.exams-mode {
+background: linear-gradient(-45deg, #4a148c, #7b1fa2, #9c27b0, #ce93d8);
+}
+
+@keyframes gradientBG {
+0% {
+    background-position: 0% 50%;
+}
+50% {
+    background-position: 100% 50%;
+}
+100% {
+    background-position: 0% 50%;
+}
+}
+
+.container {
+width: 95%;
+max-width: 1000px;
+text-align: center;
+padding: 40px;
+background: rgba(255, 255, 255, 0.1);
+backdrop-filter: blur(10px);
+border-radius: 20px;
+box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+transition: all 0.5s ease;
+margin: 20px auto;
+}
+
+h1 {
+color: white;
+font-size: 2.3rem;
+margin-bottom: 1rem;
+text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.score-container {
+margin-bottom: 15px;
+color: white;
+font-size: 1.2rem;
+text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.score-info {
+display: flex;
+align-items: center;
+gap: 30px;
+}
+
+.timer {
+background: rgba(255, 255, 255, 0.2);
+padding: 8px 15px;
+border-radius: 20px;
+font-weight: 500;
+display: none; /* Hidden by default, shown in challenge mode */
+}
+
+.exam-info {
+margin-bottom: 20px;
+padding: 10px;
+background: rgba(255, 255, 255, 0.15);
+border-radius: 10px;
+color: white;
+text-align: left;
+font-size: 0.9rem;
+display: flex;
+justify-content: space-between;
+}
+
+.stimulus-container {
+margin-bottom: 30px;
+padding: 25px;
+background: rgba(255, 255, 255, 0.15);
+border-radius: 15px;
+box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+backdrop-filter: blur(5px);
+text-align: left;
+}
+
+.stimulus-text {
+color: white;
+font-size: 1.1rem;
+line-height: 1.6;
+margin-bottom: 15px;
+}
+
+.stimulus-image {
+max-width: 100%;
+height: auto;
+margin: 0 auto 20px auto;
+display: block;
+border-radius: 10px;
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.question-container {
+margin-bottom: 30px;
+padding: 20px;
+background: rgba(255, 255, 255, 0.15);
+border-radius: 15px;
+box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+backdrop-filter: blur(5px);
+}
+
+.question {
+color: white;
+font-size: 1.3rem;
+margin-bottom: 20px;
+text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+text-align: left;
+}
+
+.question-number {
+display: inline-block;
+width: 30px;
+height: 30px;
+background: rgba(255, 255, 255, 0.2);
+border-radius: 50%;
+text-align: center;
+line-height: 30px;
+margin-right: 10px;
+}
+
+.options-container {
+display: grid;
+grid-template-columns: 1fr;
+gap: 15px;
+}
+
+.option {
+padding: 15px;
+background: rgba(255, 255, 255, 0.15);
+border-radius: 10px;
+cursor: pointer;
+transition: all 0.3s ease;
+color: white;
+text-align: left;
+display: flex;
+align-items: center;
+border: 2px solid transparent;
+}
+
+.option:hover {
+background: rgba(255, 255, 255, 0.25);
+transform: translateY(-3px);
+box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.option.correct {
+background: rgba(76, 175, 80, 0.3);
+border-color: rgba(76, 175, 80, 0.8);
+pointer-events: none;
+}
+
+.option.wrong {
+background: rgba(244, 67, 54, 0.3);
+border-color: rgba(244, 67, 54, 0.8);
+pointer-events: none;
+}
+
+.option-letter {
+width: 30px;
+height: 30px;
+background: rgba(255, 255, 255, 0.2);
+border-radius: 50%;
+display: flex;
+justify-content: center;
+align-items: center;
+margin-right: 15px;
+font-weight: 500;
+}
+
+.feedback {
+margin: 20px 0;
+padding: 15px;
+border-radius: 10px;
+color: white;
+font-size: 1.1rem;
+text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+opacity: 0;
+transition: opacity 0.3s ease;
+}
+
+.feedback.correct {
+background: rgba(76, 175, 80, 0.3);
+opacity: 1;
+}
+
+.feedback.wrong {
+background: rgba(244, 67, 54, 0.3);
+opacity: 1;
+}
+
+.controls {
+display: flex;
+justify-content: center;
+gap: 20px;
+margin-top: 20px;
+}
+
+.control-btn {
+padding: 12px 25px;
+background: rgba(255, 255, 255, 0.2);
+color: white;
+border: none;
+border-radius: 50px;
+font-size: 1rem;
+font-weight: 500;
+cursor: pointer;
+transition: all 0.3s ease;
+}
+
+.control-btn:hover {
+background: rgba(255, 255, 255, 0.3);
+transform: translateY(-3px);
+}
+
+.back-btn {
+display: inline-block;
+padding: 10px 20px;
+background: rgba(255, 255, 255, 0.2);
+color: white;
+border: none;
+border-radius: 50px;
+font-size: 0.9rem;
+font-weight: 500;
+cursor: pointer;
+transition: all 0.3s ease;
+text-decoration: none;
+margin-top: 20px;
+}
+
+.back-btn:hover {
+background: rgba(255, 255, 255, 0.3);
+}
+
+.progress-bar-container {
+width: 100%;
+height: 8px;
+background: rgba(255, 255, 255, 0.2);
+border-radius: 4px;
+margin-bottom: 20px;
+overflow: hidden;
+}
+
+.progress-bar {
+height: 100%;
+background: rgba(76, 175, 80, 0.6);
+border-radius: 4px;
+width: 0%;
+transition: width 0.3s ease;
+}
+
+@media (max-width: 768px) {
+.container {
+    padding: 20px;
+}
+
+h1 {
+    font-size: 1.8rem;
+}
+
+.question {
+    font-size: 1.1rem;
+}
+
+.stimulus-text {
+    font-size: 1rem;
+}
+
+.option {
+    padding: 12px;
+}
+
+.score-container {
+    flex-direction: column;
+    gap: 10px;
+}
+
+.score-info {
+    width: 100%;
+    justify-content: space-between;
+}
+}
+</style>
+</head>
+<body class="exams-mode">
+<div class="container">
+<h1 id="title">AP Exam Questions</h1>
+
+<div class="score-container">
+<div class="score-info">
+    <div>Score: <span id="score">0</span> / <span id="total">0</span></div>
+    <div class="timer" id="timer">Time: <span id="time-left">00:00</span></div>
+</div>
+<div id="mode-info"></div>
+</div>
+
+<div class="progress-bar-container">
+<div class="progress-bar" id="progress-bar"></div>
+</div>
+
+<div class="exam-info" id="exam-info">
+<div id="exam-year"></div>
+<div id="exam-period"></div>
+</div>
+
+<div class="stimulus-container" id="stimulus-container">
+<!-- Stimulus content will be inserted here -->
+</div>
+
+<div class="question-container">
+<div class="question" id="question">
+    <span class="question-number" id="question-number">1</span>
+    <span id="question-text">Loading question...</span>
+</div>
+
+<div class="options-container" id="options">
+    <!-- Options will be inserted here -->
+</div>
+</div>
+
+<div class="feedback" id="feedback"></div>
+
+<div class="controls">
+<button class="control-btn" id="prev-btn" disabled>Previous Question</button>
+<button class="control-btn" id="next-btn">Next Question</button>
+</div>
+
+<a href="ap-exam.html" class="back-btn" id="back-btn">Back to Exam Selection</a>
+</div>
+
+<script src="theme.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+// Get study type and exam mode from localStorage
+const studyType = localStorage.getItem('studyType') || 'exams';
+const examMode = localStorage.getItem('examMode') || 'random';
+
+// Add appropriate class to body
+document.body.classList.add(studyType + '-mode');
+
+// Get exam data
+const examData = JSON.parse(localStorage.getItem('examData')) || [];
+
+// Variables to track state
+let currentStimulusIndex = 0;
+let currentQuestionIndex = 0;
+let score = 0;
+let questionCount = 0;
+let answeredQuestions = 0;
+let currentQuestions = [];
+let selectedExamData = [];
+let timerInterval;
+let timeLeft = 0;
+
+// Set up the page based on the exam mode
+setupExamMode(examMode);
+
+function setupExamMode(mode) {
+    const modeInfoElement = document.getElementById('mode-info');
+    
+    switch(mode) {
+        case 'random':
+            document.getElementById('title').textContent = 'Random AP Exam Questions';
+            modeInfoElement.textContent = 'Random Questions';
+            
+            // Randomly select stimuli from all available exam data
+            selectedExamData = [...examData].sort(() => Math.random() - 0.5).slice(0, 5);
+            break;
+            
+        case 'by-period':
+            document.getElementById('title').textContent = 'Questions by Time Period';
+            
+            // Group by time period and show selection (simplified for this example)
+            // In a real implementation, you'd show a dropdown or buttons to select periods
+            const period = "Period 7: 1890-1945"; // Example period
+            modeInfoElement.textContent = period;
+            
+            selectedExamData = examData.filter(item => item.period === period);
+            break;
+            
+        case 'by-year':
+            document.getElementById('title').textContent = 'Questions by Exam Year';
+            
+            // Group by year and show selection (simplified for this example)
+            const year = 2018; // Example year
+            modeInfoElement.textContent = `${year} Exam`;
+            
+            selectedExamData = examData.filter(item => item.examYear === year);
+            break;
+            
+        case 'challenge':
+            document.getElementById('title').textContent = 'Challenge Mode';
+            modeInfoElement.textContent = 'Timed Challenge';
+            
+            // Randomly select stimuli from all available exam data
+            selectedExamData = [...examData].sort(() => Math.random() - 0.5).slice(0, 10);
+            
+            // Show and start timer (15 minutes)
+            const timerElement = document.getElementById('timer');
+            timerElement.style.display = 'block';
+            
+            timeLeft = 15 * 60; // 15 minutes in seconds
+            updateTimerDisplay();
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    endExam();
+                }
+            }, 1000);
+            break;
+    }
+    
+    // Load the first stimulus
+    if (selectedExamData.length > 0) {
+        loadStimulus(0);
+    } else {
+        // No data available for this mode
+        document.getElementById('stimulus-container').innerHTML = `
+            <div class="stimulus-text">
+                No questions available for this mode. Please try another mode.
+            </div>
+        `;
+        document.querySelector('.question-container').style.display = 'none';
+        document.getElementById('feedback').style.display = 'none';
+        document.getElementById('prev-btn').style.display = 'none';
+        document.getElementById('next-btn').style.display = 'none';
+    }
+}
+
+function updateTimerDisplay() {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    
+    document.getElementById('time-left').textContent = 
+        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    
+    // Add visual warning when time is running low
+    if (timeLeft <= 60) { // Last minute
+        document.getElementById('timer').style.color = '#ff5252';
+        document.getElementById('timer').style.fontWeight = 'bold';
+    }
+}
+
+function loadStimulus(index) {
+    if (index < 0 || index >= selectedExamData.length) return;
+    
+    currentStimulusIndex = index;
+    const stimulusData = selectedExamData[index];
+    
+    // Update exam info
+    document.getElementById('exam-year').textContent = `Exam: ${stimulusData.examYear}`;
+    document.getElementById('exam-period').textContent = stimulusData.period;
+    
+    // Update the stimulus container
+    const stimulusContainer = document.getElementById('stimulus-container');
+    
+    if (stimulusData.stimulusType === 'text') {
+        // Text stimulus
+        stimulusContainer.innerHTML = `
+            <div class="stimulus-text">${stimulusData.stimulus}</div>
+        `;
+    } else if (stimulusData.stimulusType === 'image') {
+        // Image stimulus
+        stimulusContainer.innerHTML = `
+            <img src="${stimulusData.stimulus}" alt="Stimulus image" class="stimulus-image">
+            ${stimulusData.caption ? `<div class="stimulus-text">${stimulusData.caption}</div>` : ''}
+        `;
+    } else if (stimulusData.stimulusType === 'combined') {
+        // Combined text and image
+        stimulusContainer.innerHTML = `
+            <img src="${stimulusData.stimulusImage}" alt="Stimulus image" class="stimulus-image">
+            <div class="stimulus-text">${stimulusData.stimulusText}</div>
+        `;
+    }
+    
+    // Reset question index and load first question
+    currentQuestionIndex = 0;
+    currentQuestions = stimulusData.questions;
+    loadQuestion(0);
+    
+    // Update navigation buttons
+    updateNavButtons();
+    
+    // Update progress bar
+    updateProgressBar();
+}
+function loadQuestion(index) {
+    if (!currentQuestions || index < 0 || index >= currentQuestions.length) return;
+    
+    currentQuestionIndex = index;
+    const questionData = currentQuestions[index];
+    
+    // Update question text and number
+    document.getElementById('question-number').textContent = index + 1;
+    document.getElementById('question-text').textContent = questionData.questionText;
+    
+    // Clear and populate options
+    const optionsContainer = document.getElementById('options');
+    optionsContainer.innerHTML = '';
+    
+    // Add letter to each option (A, B, C, D)
+    const letters = ['A', 'B', 'C', 'D'];
+    
+    questionData.options.forEach((optionText, optionIndex) => {
+        const optionElement = document.createElement('div');
+        optionElement.className = 'option';
+        optionElement.innerHTML = `
+            <div class="option-letter">${letters[optionIndex]}</div>
+            <div>${optionText}</div>
+        `;
+        
+        // Add event listener for option selection
+        optionElement.addEventListener('click', () => selectOption(optionElement, optionIndex === questionData.correctAnswer));
+        
+        optionsContainer.appendChild(optionElement);
+    });
+    
+    // Clear feedback
+    document.getElementById('feedback').className = 'feedback';
+    document.getElementById('feedback').textContent = '';
+    
+    // Update navigation buttons
+    updateNavButtons();
+}
+
+function selectOption(optionElement, isCorrect) {
+    // Don't allow re-selection if already answered
+    if (document.querySelector('.option.correct') || document.querySelector('.option.wrong')) {
+        return;
+    }
+    
+    // Disable all options
+    document.querySelectorAll('.option').forEach(option => {
+        option.style.pointerEvents = 'none';
+    });
+    
+    const feedback = document.getElementById('feedback');
+    
+    if (isCorrect) {
+        // Mark as correct
+        optionElement.classList.add('correct');
+        
+        // Show correct feedback
+        feedback.className = 'feedback correct';
+        feedback.textContent = 'Correct! ✓';
+        
+        // Update score
+        score++;
+        document.getElementById('score').textContent = score;
+    } else {
+        // Mark as wrong
+        optionElement.classList.add('wrong');
+        
+        // Show wrong feedback
+        feedback.className = 'feedback wrong';
+        feedback.textContent = 'Incorrect! ✗';
+        
+        // Highlight the correct answer
+        document.querySelectorAll('.option').forEach((option, index) => {
+            if (index === currentQuestions[currentQuestionIndex].correctAnswer) {
+                option.classList.add('correct');
+            }
+        });
+    }
+    
+    // Increment answered count
+    answeredQuestions++;
+    
+    // Animate feedback
+    feedback.animate([
+        { opacity: 0, transform: 'translateY(-10px)' },
+        { opacity: 1, transform: 'translateY(0)' }
+    ], {
+        duration: 300,
+        fill: 'forwards',
+        easing: 'ease-out'
+    });
+    
+    // Update total answered questions
+    document.getElementById('total').textContent = answeredQuestions;
+    
+    // Enable next button if there are more questions
+    if (currentQuestionIndex < currentQuestions.length - 1 || currentStimulusIndex < selectedExamData.length - 1) {
+        document.getElementById('next-btn').disabled = false;
+    }
+}
+
+function updateNavButtons() {
+    // Previous button enabled if not on first question or first stimulus
+    document.getElementById('prev-btn').disabled = 
+        (currentQuestionIndex === 0 && currentStimulusIndex === 0);
+    
+    // Next button disabled if not answered current question (unless in review mode)
+    const isCurrentQuestionAnswered = document.querySelector('.option.correct') || 
+                                    document.querySelector('.option.wrong');
+    
+    document.getElementById('next-btn').disabled = 
+        !isCurrentQuestionAnswered && 
+        currentQuestionIndex === currentQuestions.length - 1 && 
+        currentStimulusIndex === selectedExamData.length - 1;
+}
+
+function updateProgressBar() {
+    // Calculate progress percentage
+    let totalQuestions = 0;
+    let currentQuestionPosition = 0;
+    
+    // Count total questions across all stimuli
+    selectedExamData.forEach((stimulus, sIndex) => {
+        totalQuestions += stimulus.questions.length;
+        
+        // Count questions up to current position
+        if (sIndex < currentStimulusIndex) {
+            currentQuestionPosition += stimulus.questions.length;
+        } else if (sIndex === currentStimulusIndex) {
+            currentQuestionPosition += currentQuestionIndex;
+        }
+    });
+    
+    const progressPercent = (totalQuestions === 0) ? 0 : (currentQuestionPosition / totalQuestions) * 100;
+    document.getElementById('progress-bar').style.width = progressPercent + '%';
+}
+
+function goToNextQuestion() {
+    // If there are more questions in the current stimulus, go to next question
+    if (currentQuestionIndex < currentQuestions.length - 1) {
+        loadQuestion(currentQuestionIndex + 1);
+    } 
+    // Otherwise, go to next stimulus if available
+    else if (currentStimulusIndex < selectedExamData.length - 1) {
+        loadStimulus(currentStimulusIndex + 1);
+    }
+    // If at the end, show summary
+    else {
+        endExam();
+    }
+}
+
+function goToPrevQuestion() {
+    // If not on first question of current stimulus, go to previous question
+    if (currentQuestionIndex > 0) {
+        loadQuestion(currentQuestionIndex - 1);
+    } 
+    // Otherwise, go to previous stimulus if available
+    else if (currentStimulusIndex > 0) {
+        const prevStimulusIndex = currentStimulusIndex - 1;
+        const prevStimulus = selectedExamData[prevStimulusIndex];
+        
+        // Load previous stimulus
+        currentStimulusIndex = prevStimulusIndex;
+        currentQuestions = prevStimulus.questions;
+        
+        // Update exam info
+        document.getElementById('exam-year').textContent = `Exam: ${prevStimulus.examYear}`;
+        document.getElementById('exam-period').textContent = prevStimulus.period;
+        
+        // Update stimulus container
+        const stimulusContainer = document.getElementById('stimulus-container');
+        
+        if (prevStimulus.stimulusType === 'text') {
+            stimulusContainer.innerHTML = `
+                <div class="stimulus-text">${prevStimulus.stimulus}</div>
+            `;
+        } else if (prevStimulus.stimulusType === 'image') {
+            stimulusContainer.innerHTML = `
+                <img src="${prevStimulus.stimulus}" alt="Stimulus image" class="stimulus-image">
+                ${prevStimulus.caption ? `<div class="stimulus-text">${prevStimulus.caption}</div>` : ''}
+            `;
+        } else if (prevStimulus.stimulusType === 'combined') {
+            stimulusContainer.innerHTML = `
+                <img src="${prevStimulus.stimulusImage}" alt="Stimulus image" class="stimulus-image">
+                <div class="stimulus-text">${prevStimulus.stimulusText}</div>
+            `;
+        }
+        
+        // Load the last question of the previous stimulus
+        loadQuestion(currentQuestions.length - 1);
+    }
+    
+    // Update progress bar
+    updateProgressBar();
+}
+
+function endExam() {
+    // Clear any existing timer
+    if (timerInterval) {
+        clearInterval(timerInterval);
+    }
+    
+    // Calculate total questions
+    let totalQuestions = 0;
+    selectedExamData.forEach(stimulus => {
+        totalQuestions += stimulus.questions.length;
+    });
+    
+    // Show summary with score
+    const container = document.querySelector('.container');
+    container.innerHTML = `
+        <h1>Exam Complete!</h1>
+        
+        <div class="score-container">
+            <div class="score-info">
+                <div>Final Score: ${score} / ${answeredQuestions}</div>
+                <div>${Math.round((score/answeredQuestions) * 100)}%</div>
+            </div>
+        </div>
+        
+        <div class="stimulus-container">
+            <div class="stimulus-text">
+                ${getScoreFeedback(score, answeredQuestions)}
+            </div>
+        </div>
+        
+        <div class="controls">
+            <a href="ap-exam.html" class="control-btn">Back to Exam Selection</a>
+            <button class="control-btn" id="restart-btn">Try Again</button>
+        </div>
+    `;
+    
+    // Add event listener for restart button
+    document.getElementById('restart-btn').addEventListener('click', () => {
+        location.reload();
+    });
+}
+
+function getScoreFeedback(score, total) {
+    const percentage = (total === 0) ? 0 : Math.round((score/total) * 100);
+    
+    if (percentage >= 90) {
+        return `
+            <h2>Excellent Work!</h2>
+            <p>Your score of ${percentage}% demonstrates a strong understanding of APUSH content. You're well-prepared for the AP exam!</p>
+            <p>Remember that the actual AP exam will also include free-response questions and document-based questions (DBQs).</p>
+        `;
+    } else if (percentage >= 70) {
+        return `
+            <h2>Good Job!</h2>
+            <p>Your score of ${percentage}% shows a solid grasp of APUSH content. With a bit more review, you'll be in great shape for the exam.</p>
+            <p>Focus on understanding the historical thinking skills and reviewing any periods that challenged you.</p>
+        `;
+    } else if (percentage >= 50) {
+        return `
+            <h2>Getting There!</h2>
+            <p>Your score of ${percentage}% indicates you're on the right track, but more review would be beneficial.</p>
+            <p>Try focusing on understanding historical contexts, causation, and the relationships between events.</p>
+        `;
+    } else {
+        return `
+            <h2>Keep Studying!</h2>
+            <p>Your score of ${percentage}% suggests you should continue reviewing APUSH content.</p>
+            <p>Consider organizing your study by time periods, focusing on major themes, and practicing with more questions.</p>
+        `;
+    }
+}
+
+// Event listeners for navigation buttons
+document.getElementById('next-btn').addEventListener('click', goToNextQuestion);
+document.getElementById('prev-btn').addEventListener('click', goToPrevQuestion);
+
+// Add fade-in animation
+const container = document.querySelector('.container');
+container.style.opacity = '0';
+container.style.transition = 'opacity 0.8s ease';
+
+setTimeout(() => {
+    container.style.opacity = '1';
+}, 200);
+});
+</script>
+</body>
+</html>

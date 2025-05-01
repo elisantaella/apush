@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiple Choice Quiz - APUSH Final Mastery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+        
+        body.presidents-mode {
+            background: linear-gradient(-45deg, #ff9800, #f57c00, #ff7043, #ffab91);
+        }
+        
+        body.events-mode {
+            background: linear-gradient(-45deg, #1a237e, #0d47a1, #2196f3, #bbdefb);
+        }
+        
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.5s ease;
+        }
+        
+        h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .score-container {
+            margin-bottom: 20px;
+            color: white;
+            font-size: 1.2rem;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .question-container {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(5px);
+        }
+        
+        .question {
+            color: white;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        
+        .option {
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            border: 2px solid transparent;
+        }
+        
+        .option:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .option.correct {
+            background: rgba(76, 175, 80, 0.3);
+            border-color: rgba(76, 175, 80, 0.8);
+            pointer-events: none;
+        }
+        
+        .option.wrong {
+            background: rgba(244, 67, 54, 0.3);
+            border-color: rgba(244, 67, 54, 0.8);
+            pointer-events: none;
+        }
+        
+        .option-letter {
+            width: 30px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            font-weight: 500;
+        }
+        
+        .feedback {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+            font-size: 1.1rem;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .feedback.correct {
+            background: rgba(76, 175, 80, 0.3);
+            opacity: 1;
+        }
+        
+        .feedback.wrong {
+            background: rgba(244, 67, 54, 0.3);
+            opacity: 1;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .control-btn {
+            padding: 12px 25px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
+        
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .question {
+                font-size: 1.2rem;
+            }
+            
+            .option {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="title">Multiple Choice Quiz</h1>
+        
+        <div class="score-container">
+            Score: <span id="score">0</span> / <span id="total">0</span>
+        </div>
+        
+        <div class="question-container">
+            <div class="question" id="question">Loading question...</div>
+            
+            <div class="options-container" id="options">
+                <!-- Options will be inserted here -->
+            </div>
+        </div>
+        
+        <div class="feedback" id="feedback"></div>
+        
+        <div class="controls">
+            <button class="control-btn" id="next-btn">Next Question</button>
+        </div>
+        
+        <a href="#" class="back-btn" id="back-btn">Back to Selection</a>
+    </div>
+
+    <script src="theme.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get study type from localStorage
+            const studyType = localStorage.getItem('studyType') || 'presidents';
+            
+            // Add appropriate class to body based on study type
+            document.body.classList.add(studyType + '-mode');
+            
+            // Set back button href based on study type
+            document.getElementById('back-btn').href = studyType + '.html';
+            
+            // Update title based on study type
+            document.getElementById('title').textContent = studyType === 'presidents' ? 'Presidents Quiz' : 'Pivotal Events Quiz';
+            
+            // Get data based on study type
+            const studyData = JSON.parse(localStorage.getItem(studyType + 'Data')) || [];
+            
+            let score = 0;
+            let currentQuestion = null;
+            let questionCount = 0;
+            const totalQuestions = 10;
+            
+            // Function to generate a random question
+            const generateQuestion = () => {
+                // Reset feedback
+                document.getElementById('feedback').className = 'feedback';
+                document.getElementById('feedback').textContent = '';
+                
+                // Enable all options
+                document.querySelectorAll('.option').forEach(option => {
+                    option.classList.remove('correct', 'wrong');
+                    option.style.pointerEvents = 'auto';
+                });
+                
+                // Generate a random index
+                const randomIndex = Math.floor(Math.random() * studyData.length);
+                const correctAnswer = studyData[randomIndex];
+                
+                let questionText = '';
+                let options = [];
+                
+                if (studyType === 'presidents') {
+                    // Generate a random question type (1: name->event, 2: event->name, 3: years->name)
+                    const questionType = Math.floor(Math.random() * 2) + 1;
+                    
+                    if (questionType === 1) {
+                        questionText = `Which significant event is associated with ${correctAnswer.name}'s presidency?`;
+                        options.push({ text: correctAnswer.event, correct: true });
+                        
+                        // Get 3 wrong answers
+                        while (options.length < 4) {
+                            const randomWrongIndex = Math.floor(Math.random() * studyData.length);
+                            if (randomWrongIndex !== randomIndex) {
+                                const wrongOption = { text: studyData[randomWrongIndex].event, correct: false };
+                                // Check if this option is already in the array
+                                if (!options.some(opt => opt.text === wrongOption.text)) {
+                                    options.push(wrongOption);
+                                }
+                            }
+                        }
+                    } else if (questionType === 2) {
+                        questionText = `Which president is associated with: ${correctAnswer.event}?`;
+                        options.push({ text: correctAnswer.name, correct: true });
+                        
+                        // Get 3 wrong answers
+                        while (options.length < 4) {
+                            const randomWrongIndex = Math.floor(Math.random() * studyData.length);
+                            if (randomWrongIndex !== randomIndex) {
+                                const wrongOption = { text: studyData[randomWrongIndex].name, correct: false };
+                                // Check if this option is already in the array
+                                if (!options.some(opt => opt.text === wrongOption.text)) {
+                                    options.push(wrongOption);
+                                }
+                            }
+                        }
+                    } else {
+                        questionText = `Which president served during ${correctAnswer.years}?`;
+                        options.push({ text: correctAnswer.name, correct: true });
+                        
+                        // Get 3 wrong answers
+                        while (options.length < 4) {
+                            const randomWrongIndex = Math.floor(Math.random() * studyData.length);
+                            if (randomWrongIndex !== randomIndex) {
+                                const wrongOption = { text: studyData[randomWrongIndex].name, correct: false };
+                                // Check if this option is already in the array
+                                if (!options.some(opt => opt.text === wrongOption.text)) {
+                                    options.push(wrongOption);
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    // For events, generate random question type (1: date->event, 2: event->date)
+                    const questionType = Math.floor(Math.random() * 2) + 1;
+                    
+                    if (questionType === 1) {
+                        questionText = `What major event occurred in ${correctAnswer.year}?`;
+                        options.push({ text: correctAnswer.event, correct: true });
+                        
+                        // Get 3 wrong answers
+                        while (options.length < 4) {
+                            const randomWrongIndex = Math.floor(Math.random() * studyData.length);
+                            if (randomWrongIndex !== randomIndex) {
+                                const wrongOption = { text: studyData[randomWrongIndex].event, correct: false };
+                                // Check if this option is already in the array
+                                if (!options.some(opt => opt.text === wrongOption.text)) {
+                                    options.push(wrongOption);
+                                }
+                            }
+                        }
+                    } else {
+                        questionText = `When did the following event occur: ${correctAnswer.event}?`;
+                        options.push({ text: correctAnswer.year, correct: true });
+                        
+                        // Get 3 wrong answers
+                        while (options.length < 4) {
+                            const randomWrongIndex = Math.floor(Math.random() * studyData.length);
+                            if (randomWrongIndex !== randomIndex) {
+                                const wrongOption = { text: studyData[randomWrongIndex].year, correct: false };
+                                // Check if this option is already in the array
+                                if (!options.some(opt => opt.text === wrongOption.text)) {
+                                    options.push(wrongOption);
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                // Shuffle options
+                options.sort(() => Math.random() - 0.5);
+                
+                // Update question text
+                document.getElementById('question').textContent = questionText;
+                
+                // Clear and populate options
+                const optionsContainer = document.getElementById('options');
+                optionsContainer.innerHTML = '';
+                
+                // Add letter to each option (A, B, C, D)
+                const letters = ['A', 'B', 'C', 'D'];
+                
+                options.forEach((option, index) => {
+                    const optionElement = document.createElement('div');
+                    optionElement.className = 'option';
+                    optionElement.innerHTML = `
+                        <div class="option-letter">${letters[index]}</div>
+                        <div>${option.text}</div>
+                    `;
+                    
+                    // Add event listener for option selection
+                    optionElement.addEventListener('click', () => selectOption(optionElement, option.correct));
+                    
+                    optionsContainer.appendChild(optionElement);
+                });
+                
+                // Update current question
+                currentQuestion = {
+                    text: questionText,
+                    options: options,
+                    correctAnswer: correctAnswer
+                };
+                
+                // Update question count and total
+                questionCount++;
+                document.getElementById('total').textContent = questionCount;
+            };
+            
+            // Function to handle option selection
+            const selectOption = (optionElement, isCorrect) => {
+                // Disable all options
+                document.querySelectorAll('.option').forEach(option => {
+                    option.style.pointerEvents = 'none';
+                });
+                
+                const feedback = document.getElementById('feedback');
+                
+                if (isCorrect) {
+                    // Mark as correct
+                    optionElement.classList.add('correct');
+                    
+                    // Show correct feedback
+                    feedback.className = 'feedback correct';
+                    feedback.textContent = 'Correct! ✓';
+                    
+                    // Update score
+                    score++;
+                    document.getElementById('score').textContent = score;
+                } else {
+                    // Mark as wrong
+                    optionElement.classList.add('wrong');
+                    
+                    // Show wrong feedback
+                    feedback.className = 'feedback wrong';
+                    feedback.textContent = 'Incorrect! ✗';
+                    
+                    // Highlight the correct answer
+                    document.querySelectorAll('.option').forEach((option, index) => {
+                        if (currentQuestion.options[index].correct) {
+                            option.classList.add('correct');
+                        }
+                    });
+                }
+                
+                // Animate feedback
+                feedback.animate([
+                    { opacity: 0, transform: 'translateY(-10px)' },
+                    { opacity: 1, transform: 'translateY(0)' }
+                ], {
+                    duration: 300,
+                    fill: 'forwards',
+                    easing: 'ease-out'
+                });
+            };
+            
+            // Function to handle next question button
+            document.getElementById('next-btn').addEventListener('click', () => {
+                if (questionCount < totalQuestions) {
+                    generateQuestion();
+                } else {
+                    // Show final score
+                    document.querySelector('.question-container').innerHTML = `
+                        <div class="question">
+                            Quiz Complete!
+                        </div>
+                        <p style="color: white; margin-top: 20px;">
+                            You scored ${score} out of ${totalQuestions}!
+                        </p>
+                        <p style="color: white; margin-top: 10px;">
+                            ${score === totalQuestions ? 'Perfect score! Great job!' : 
+                              score >= totalQuestions * 0.8 ? 'Excellent work!' : 
+                              score >= totalQuestions * 0.6 ? 'Good job!' : 
+                              'Keep studying, you can do better!'}
+                        </p>
+                    `;
+                    
+                    // Hide feedback and next button
+                    document.getElementById('feedback').style.display = 'none';
+                    document.getElementById('next-btn').textContent = 'Restart Quiz';
+                    document.getElementById('next-btn').addEventListener('click', () => {
+                        location.reload();
+                    }, { once: true });
+                }
+            });
+            
+            // Start the quiz
+            generateQuestion();
+            
+            // Add fade-in animation
+            const container = document.querySelector('.container');
+            container.style.opacity = '0';
+            container.style.transition = 'opacity 0.8s ease';
+            
+            
+            setTimeout(() => {
+                container.style.opacity = '1';
+            }, 200);
+        });
+    </script>
+</body>
+</html>
